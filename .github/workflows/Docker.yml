@@ -1,0 +1,27 @@
+name: Docker test workflow
+
+on:
+  workflow_call:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Docker Build
+      uses: docker/setup-buildx-action@v2.0.0
+
+    - name: Docker Login
+      uses: docker/login-action@v2.0.0
+      with:
+        username: ${{ secrets.DOCKER_HUB_USER }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v3.0.0
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_HUB_USER }}/go_ci:${{ github.ref_name }}
