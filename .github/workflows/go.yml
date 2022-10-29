@@ -45,6 +45,12 @@ jobs:
     - name: Build
       run: go build -v main.go
 
+    - name: Upload a Build Artifact (main compilado)
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: go_app
+        path: main
+
   docker:
     needs: build
     uses: ./.github/workflows/Docker.yml
